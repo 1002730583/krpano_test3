@@ -1,0 +1,366 @@
+<krpano version="1.19" title="中豪国际">
+
+	<include url="skin/vtourskin.xml" /><!--皮肤插件-->
+	<include url="plugins/showtext.xml" /><!--文本样式显示插件-->
+	<!--<include url="dbx_hotspots_editor.xml" />--><!--多边形热点插件-->
+	<!--<plugin name="editor"  url="plugins/editor.swf" keep="true"  />--><!--图片热点制作插件-->
+	<include url="skin/youtubeplayer.xml" /> <!--视频插件-->
+	<include url="skin/videoplayer.xml" /><!--视频插件-->
+
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings maps="false"
+	               maps_type="google"
+	               maps_bing_api_key=""
+	               maps_google_api_key=""
+	               maps_zoombuttons="false"
+	               gyro="true"
+	               webvr="true"
+	               webvr_gyro_keeplookingdirection="false"
+	               webvr_prev_next_hotspots="true"
+	               littleplanetintro="false"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_buttons="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               deeplinking="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+	               loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+	               loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+	               loadingtext="loading..."
+	               layout_width="100%"
+	               layout_maxwidth="814"
+	               controlbar_width="-24"
+	               controlbar_height="40"
+	               controlbar_offset="20"
+	               controlbar_offset_closed="-40"
+	               controlbar_overlap.no-fractionalscaling="10"
+	               controlbar_overlap.fractionalscaling="0"
+	               design_skin_images="vtourskin.png"
+	               design_bgcolor="0x2D3E50"
+	               design_bgalpha="0.8"
+	               design_bgborder="0"
+	               design_bgroundedge="1"
+	               design_bgshadow="0 4 10 0x000000 0.3"
+	               design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+	               design_thumbborder_padding="2"
+	               design_thumbborder_bgroundedge="0"
+	               design_text_css="color:#FFFFFF; font-family:Arial;"
+	               design_text_shadow="1"
+	               />
+
+	<!--
+	    For an alternative skin design either change the <skin_settings> values 
+	    from above or optionally include one of the predefined designs from below.
+	-->
+	<!-- <include url="skin/vtourskin_design_flat_light.xml"  /> -->
+	<!-- <include url="skin/vtourskin_design_glass.xml"       /> -->
+	<!-- <include url="skin/vtourskin_design_ultra_light.xml" /> -->
+	<!-- <include url="skin/vtourskin_design_117.xml"         /> -->
+	<!-- <include url="skin/vtourskin_design_117round.xml"    /> -->
+	<!-- <include url="skin/vtourskin_design_black.xml"       /> -->
+
+
+	<!-- startup action - load the first scene -->
+	<action name="startup" autorun="onstart">
+		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
+		loadscene(get(startscene), null, MERGE);
+		if(startactions !== null, startactions() );
+	</action>
+	
+	<action name="mobilescale" autorun="preinit" devices="mobile">
+		mul(stagescale,0.86);
+	</action>
+	
+	<!--提示文字样式-->	
+	<textstyle name="STYLE2"
+			   font="Arial"
+			   fontsize="17"
+			   bold="true"
+			   background="false"
+			   border="false"
+			   textcolor="0xFFFFFF"
+			   effect="glow(0x000000);"
+			   textalign="center"
+			   />
+	
+	<!-- Textstyle STYLE4 -->
+	<textstyle name="STYLE4"
+	           font="Arial" fontsize.no-mobile="12" fontsize.mobile="28" bold="true"
+	           background="true" backgroundcolor="0x000000" backgroundalpha="0.667"
+	           border="true" borderwidth="1" bordercolor="0xFFFFFF" roundedge="10"
+	           textcolor="0xFFFFFF"
+	           padding="6 10"
+	           textalign="center"
+	           yoffset.no-touch="-5"
+	           yoffset.touch="-40"
+	           />
+	  
+	  <!--标题样式-->         
+	<layer name="text_123"
+       url="plugins/textfield.swf"
+       align="top" x="0" y="10" edge="topcenter"
+       html="廖总的小别墅"
+       css="font-family:Arial; font-size:32px; color:#000000;"
+       autowidth=""
+       autoheight=""
+       vcenter="false"
+       padding="5"
+       keep="true"
+       wordwrap="true"
+       selectable="true"
+       embeddedfonts="false"
+       background="true"
+       backgroundcolor="0xFFFFFF"
+       backgroundalpha="1.0"
+       border="false"
+       bordercolor="0x000000"
+       borderalpha="1.0"
+       borderwidth="1.0"
+       roundedge="8"
+       shadow="0.0"
+       shadowrange="4.0"
+       shadowangle="45"
+       shadowcolor="0x000000"
+       shadowalpha="1.0"
+       textshadow="2.0"
+       textshadowrange="4.0"
+       textshadowangle="45"
+       textshadowcolor="0x000000"
+       textshadowalpha="1.0"
+       onautosized=""
+       /> 
+<!--文本插件  -->
+	
+	<!--UI设计  企业logo  -->
+	<layer name="ui_logo" type="image" url="images/logo.png" keep="true" visible="true" 
+		zorder="1" align="lefttop" x="10" y="10" autowidth="" autoheight="" scale="0.9" alpha="1.0"
+   		onclick="openurl('http://zlqj.com.cn',_blank);" />	
+   
+   <!--UI设计  按钮  STAT-->   
+   <layer name="ui_anniu" type="image" url="images/copter_st1.png" keep="true" visible="true" zorder="1" align="left" x="" y="" scale="0.8"  onhover="showtext('详情',STYLE4);"
+   onclick="ui_anniu_action()" />
+   	<!--delayedcall(0.5,tween(layer[ui_jieshao].scale,1.0));-->
+   <layer name="ui_jieshao" type="image" url="images/000.jpg" keep="true" visible="flase" zorder="2" align="center" x="" y="" scale="0.0"   alpha="1.0" onclick="" >
+      
+      <layer name="ui_close" type="image" url="images/000.jpg" crop="711|0|37|37" visible="true" zorder="1" align="righttop" x="" y="" scale="1.0"  alpha="1.0" onhover="showtext(关闭,STYLE4);" 
+   onclick="ui_jieshao_action();" />
+   
+      <layer name="ui_goumai" type="image" url="images/000.jpg" crop="495|429|100|30"  visible="true" zorder="1" align="lefttop" x="495" y="429" scale="1.0"  alpha="1.0" onhover="showtext(点击购买,STYLE4);" onclick="openurl('goumai.html',_blank);" />
+   
+     <layer name="ui_xinxin" type="image" url="images/000.jpg" crop="383|429|100|30" visible="true" zorder="1" align="lefttop" x="383" y="429" scale="1.0"  alpha="1.0" onhover="showtext(详细信息,STYLE4);" onclick="openurl('goumai.html',_blank);" />
+      
+	</layer>
+	
+	
+	
+	
+	<action name="ui_anniu_action">
+			delayedcall(0.5,set(layer[ui_jieshao].visible,true) );
+			delayedcall(0.5,set(layer[ui_close].visible,true) );
+			delayedcall(0.5,set(layer[ui_goumai].visible,true) );
+			delayedcall(0.5,set(layer[ui_xinxin].visible,true) );
+			delayedcall(0.5,tween(layer[ui_jieshao].scale,1.0));
+			delayedcall(0.5,tween(layer[ui_jieshao].scale.mobile,0.6));
+			
+	</action>
+	
+	<action name="ui_jieshao_action">
+			set(layer[ui_close].visible,false);
+			set(layer[ui_goumai].visible,false);
+			set(layer[ui_xinxin].visible,false);
+			delayedcall(0.5,tween(layer[ui_jieshao].scale,0.0));
+	</action>
+	<!--UI设计  按钮  END  --> 
+	
+	<!--图片热点弹出 动作属性-->
+	<action name="flyout">
+		copy(backup_rx,rx);
+		copy(backup_ry,ry);
+		copy(backup_rz,rz);
+		copy(backup_scale,scale);
+
+		tween(rx, 0);
+		tween(ry, 0);
+		tween(rz, 0);
+		tween(scale, 1.5);
+		tween(flying, 1.0);
+	</action>
+
+	<action name="flyback">
+		tween(rx, get(backup_rx));
+		tween(ry, get(backup_ry));
+		tween(rz, get(backup_rz));
+		tween(scale, get(backup_scale));
+		tween(flying, 0.0);
+	</action>
+
+	
+	<!--镜头自动旋转-->
+	<autorotate enabled="true"  
+                waittime="1.0"   
+                speed="1.0"   
+                horizon="0.0"   
+                tofov="120"   
+            /> 
+	
+	<scene name="scene_c1" title="c1" onstart="" thumburl="panos/c1.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/c1.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/c1.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/c1.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-109.597" atv="8.808" linkedscene="scene_c3" />
+		<!--自定义热点图标-->
+		<hotspot name="spot2" style="hotspot_ani_black" ath="164.654" atv="22.714" linkedscene="scene_c2" />
+		<hotspot name="spot3" style="hotspot_ani_white" ath="-13.715" atv="12.843" linkedscene="scene_c5" />
+		<!--图片热点logo-->
+		<hotspot name="hs1" url="images/logo.png" 
+	         ath="228.718434" atv="-6.292886" distorted="true" rx="-10.5" ry="-18.0" rz="1.105743" width="312" height="62" scale="0.859054" 
+	         depth="1000"
+	         ishotspot="true"
+	         loader_alternative=""
+	         scaleflying="true"
+	         tx="0"
+	         ty="0"
+	         tz="0"
+	         onclick="if(flying == 0.0, flyout()  ); if(flying == 1.0, flyback() );" 
+	         />
+	         <!--热点视频-->
+         <hotspot name="hs2" 
+         url.html5="%SWFPATH%/plugins/videoplayer.js"
+	     url.flash="%SWFPATH%/plugins/videoplayer.swf"	
+         url="images/media_playback_start.png"
+         posterurl="cats-poster.jpg" 
+         ath="-48.673408" atv="0.802621" distorted="true" rx="13.0375" ry="1.875" rz="4.914728" width="128" height="128" scale="0.276552" 
+         depth="1000"
+         ishotspot="true"
+         loader_alternative=""
+         scaleflying="true"
+         tx="0"
+         ty="0"
+         tz="0"
+         loop="true"
+	     pausedonstart="true"
+	     devices="all"
+         onclick="looktohotspot(get(name),get(view.fov)); videoplayer_open(skin/1372018984C670.mp4, skin/1372018994ED23.JPG);"
+         />
+         
+         
+         <!--<preview type="grid(cube,128,128,512,0xDDDDDD,0xFFFFFF,0x999999);" />
+         <hotspot name="videospot"
+	         url.html5="%SWFPATH%/plugins/videoplayer.js"
+	         url.flash="%SWFPATH%/plugins/videoplayer.swf"
+	         videourl="cats.mp4|cats.webm"
+	         posterurl="cats-poster.jpg"
+	         distorted="true"
+	         ath="0"
+	         atv="0"
+	         edge="center"
+	         scale="1.0"
+	         rx="0"
+	         ry="0"
+	         rz="0"
+	         ox="0"
+	         oy="0"
+	         loop="true"
+	         pausedonstart="true"
+	         onclick="togglepause();"
+	         />-->
+		 
+	</scene>
+
+	<scene name="scene_c2" title="c2" onstart="" thumburl="panos/c2.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/c2.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/c2.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/c2.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="151.734" atv="28.602" linkedscene="scene_c1" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="91.528" atv="8.305" linkedscene="scene_c3" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="165.693" atv="9.350" linkedscene="scene_c5" />
+
+	</scene>
+
+	<scene name="scene_c3" title="c3" onstart="" thumburl="panos/c3.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/c3.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/c3.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/c3.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="70.208" atv="20.457" linkedscene="scene_c4" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="107.823" atv="13.651" linkedscene="scene_c1" />
+
+	</scene>
+
+	<scene name="scene_c4" title="c4" onstart="" thumburl="panos/c4.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/c4.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/c4.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/c4.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-109.645" atv="24.118" linkedscene="scene_c3" />
+
+	</scene>
+
+	<scene name="scene_c5" title="c5" onstart="" thumburl="panos/c5.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/c5.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/c5.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/c5.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+		<hotspot name="spot2" style="hotspot_ani_white" ath="-178.697" atv="13.382" linkedscene="scene_c1" />
+	</scene>
+
+
+</krpano>

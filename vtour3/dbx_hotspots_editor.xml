@@ -1,0 +1,148 @@
+<krpano>
+	
+
+	
+<!-- The new hotspots need your style name for the ouput code. -->	
+<phe_settings
+	style_name="mypolygonalhotspotstylename"
+/>			  
+
+<!-- the style for your hotspot ..ONLY THE NAME WILL BE USED IN THE OUTPUT CODE!!!! -->	
+<style name="newpoly" fillcolor="0xff0000" fillalpha="0.2" borderwidth="3.0" bordercolor="0xaaaaaa" borderalpha="1.0" onover="tween(fillalpha,1);" onout="tween(fillalpha,0.2);" onclick="showlog();" ondown.touch="onover(); asyncloop(pressed, onhover(); );" onup.touch="onout();" />
+	
+<!-- editor button style -->	
+<style name="phe_btn" type="text" align="top" width="-20" height="30" vcenter="true" mipmapping="true" oversampling="2" css="data:css_phebtn" />	
+	
+	
+<!-- the editor -->	
+<layer name="phe_box" type="container" keep="true" align="lefttop" x="20" y="20" width="140" height="180" bgcolor="0x222222" bgalpha="1" onloaded="set(hs, 0);" >
+	<layer name="phe_btntit" type="text" enabled="false" align="top" width="-20" height="40"  y="10" vcenter="true" mipmapping="true" oversampling="2" css="data:css_phetit" bgcolor="0x726FA3" html="多边形热点编辑器" />
+	<layer name="phe_btn1" style="phe_btn" y="60" html="添加热区" onclick="startdraw();" />
+	<layer name="phe_btn2" style="phe_btn" y="100" html="显示代码" onclick="Print();" />
+	<layer name="phe_btn3" style="phe_btn" y="140" html="使用帮助" onclick="ShowPheHelp" />
+	<layer name="phe_help_box" type="container" keep="true" align="righttop" edge="lefttop" width="0" height="100%" bgcolor="0x222222" bgalpha="0" maskchildren="true" >
+		<layer name="phe_help" type="text" align="lefttop" height="200" width="400" padding="10" css="data:css_phehelp" html="data:html_phehelp" mipmapping="true" oversampling="2" onclick="ShowPheHelp" />
+	</layer>	
+</layer>	
+	
+	
+<!-- Show / Hide the usersmanual or help -->	
+<action name="ShowPheHelp">
+	if(layer[phe_help_box].width GT 0,
+		tween(layer[phe_help_box].width,0);
+	,
+		tween(layer[phe_help_box].width,400);
+	);
+	</action>
+	
+	
+<!-- CSS -->	
+<data name="css_phetit">
+	font-family:Helvetica; font-size:12px; color:#ffffff; text-align:center; line-height:14px;
+</data>
+<data name="css_phebtn">
+	font-family:Helvetica; font-size:10px; color:#222222; text-align:center; line-height:10px;
+</data>
+<data name="css_phehelp">
+	font-family:Helvetica; font-size:13px; color:#222222; text-align:left; line-height:13px;
+</data>
+	
+	
+<!-- HELP TEXT -->
+<data name="html_phehelp">
+	• 点击添加新热区按钮或按下键盘'Q'键，开始绘制多边形热点。 
+	[br][br]
+	• 完成后点击空格键。
+	[br][br]
+	* 点击添加新热区按钮或按下键盘'Q'键，开始绘制下一个多边形热点。
+	[br][br][br]
+	***
+	所有热区完成后，按下键盘'P'键将代码输出到信息窗口中。然后把代码复制到项目中。
+</data>
+	
+<!--
+ ***************** THE ENGINE ***********
+-->
+	
+<events 
+	onkeydown="if(keycode == 81, startdraw());
+			   if(keycode == 32, stopdraw(get(hsname)));   
+			   if(keycode == 80, Print());"
+	onclick="if(drawing == true, addpoint());"
+/>
+	
+<action name="startdraw" >
+	inc(hs);
+	set(drawing, true);
+	txtadd(hsname, 'hs', get(hs));
+	
+	addhotspot(get(hsname));
+	hotspot[get(hsname)].loadstyle(newpoly);
+	set(hotspot[get(hsname)].enabled, false);
+	set(pid, 0);
+</action>
+	
+<action name="stopdraw">
+	set(drawing, false);
+	MakeCode(%1);
+</action>
+	
+<action name="addpoint">
+	screentosphere(mouse.x, mouse.y, toh, tov);
+	set(hotspot[get(hsname)],point[get(pid)].ath=get(toh),point[get(pid)].atv=get(tov));
+	if(_points,
+		set(_points, calc:_points + '&#xA;&#09;' + data[html_point].content + 'ath="' + toh + '" atv="' + tov + '"' + data[html_/exit].content);
+	,
+		set(_points, calc:'&#09;' + data[html_point].content + 'ath="' + toh + '" atv="' + tov + '"' + data[html_/exit].content);
+	);
+	updatescreen();
+	mousemove();
+	inc(pid);
+</action>
+	
+<action name="mousemove">
+	screentosphere(mouse.x, mouse.y, toh, tov);
+	set(hotspot[get(hsname)].point[get(pid)].ath, get(toh));
+	set(hotspot[get(hsname)].point[get(pid)].atv, get(tov));
+	updatescreen();
+	if(drawing == true, delayedcall(0.0, mousemove()));
+</action>
+
+<action name="MakeCode">
+	set(_phestyle, calc:phe_settings.style_name);
+	if(_toprintstyle,
+		set(_toprintstyle, calc:_toprintstyle + '&#xA;&#xA;' + data[html_hotspot].content + ' name="%1" style="' + _phestyle + '"' + data[html_/close].content + '&#xA;' + _points + '&#xA;' + data[html_hotspotend].content);
+	,
+		set(_toprintstyle, calc:data[html_quoteopen].content + data[html_quote].content +  data[html_quoteend].content + '&#xA;&#xA;' + data[html_hotspot].content + ' name="%1" style="' + _phestyle + '"' + data[html_/close].content + '&#xA;' + _points + '&#xA;' + data[html_hotspotend].content);
+	);
+
+
+	if(_toprint,
+		set(_toprint, calc:_toprint + '&#xA;&#xA;' + data[html_hotspot].content + ' name="%1" style="' + _phestyle + '"' + data[html_/close].content + '&#xA;' + _points + '&#xA;' + data[html_hotspotend].content);
+	,
+		set(_toprint, calc:data[html_quoteopen].content + data[html_quote].content +  data[html_quoteend].content + '&#xA;&#xA;' + data[html_hotspot].content + ' name="%1" style="' + _phestyle + '"' + data[html_/close].content + '&#xA;' + _points + '&#xA;' + data[html_hotspotend].content);
+	);
+	
+	set(hotspot[%1].enabled, true);
+	set(_points, );
+</action>
+
+<data name="html_point"><![CDATA[<point ]]></data>
+<data name="html_/close"><![CDATA[ >]]></data>
+<data name="html_/exit"><![CDATA[ />]]></data>	
+<data name="html_hotspot"><![CDATA[<hotspot ]]></data>
+<data name="html_hotspotend"><![CDATA[</hotspot>]]></data>
+<data name="html_quoteopen"><![CDATA[<!-- ]]></data>
+<data name="html_quoteend"><![CDATA[ -->]]></data>	
+<data name="html_quote">复制代码到项目中，确保style样式. </data>
+	
+<action name="Print">
+	trace(_toprint);
+	showlog();
+</action>
+	
+	
+
+
+	
+</krpano>	
